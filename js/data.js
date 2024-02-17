@@ -36,7 +36,19 @@ function callback(mutationsList) {
 
 var mapInput = document.getElementById('MCmap');
 mapInput.onchange = (event) => {
-   updateData();
+
+  var map = document.getElementById('MCmap').value;
+  if (map == "GoldRush") {
+    map = "Gold Rush";
+  }
+  if (map == "All") {
+    document.getElementById('map_image').style.display = "none";
+  } else {
+    document.getElementById('map_image').style.display = "block";
+    document.getElementById('mappath').src = "./Maps/" + map + ".png";
+    document.getElementById('mapname').innerText = "  " + map;
+  }
+  updateData();
 }
 
 const mutationObserver = new MutationObserver(callback);
