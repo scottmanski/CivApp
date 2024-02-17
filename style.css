@@ -1,8 +1,17 @@
+html {
+    background-color: #131521;
+    background: radial-gradient(circle at 50% 150%, #31516e 0, #131521 60%);
+    background-size: cover;
+    height: fit-content;
+    
+}
 
 body {
-  background-color: #131521;
+  background-color: transparent;
   font-family: Garamond;
   font-size: 18px;
+  color: #fff;
+  margin: 18px;
 }
 
 .container-fluid {
@@ -83,5 +92,9 @@ label {
 
 .btn:hover {
   color: #333;
+}
+
+option {
+  cursor: pointer;
 }
 
