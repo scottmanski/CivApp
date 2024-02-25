@@ -1,30 +1,7 @@
 
-import AllQ from '../data/All Qualifier Civ Data.json' assert { type: 'json' };
-import AllME from '../data/All Main Event Civ Data.json' assert { type: 'json' };
-import AllQME from '../data/All Qualifier Main Event Civ Data.json' assert { type: 'json' };
-import ArabiaQ from '../data/Arabia Qualifier Civ Data.json' assert { type: 'json' };
-import ArabiaME from '../data/Arabia Main Event Civ Data.json' assert { type: 'json' };
-import ArabiaQME from '../data/Arabia Qualifier Main Event Civ Data.json' assert { type: 'json' };
-import CrossQ from '../data/Cross Qualifier Civ Data.json' assert { type: 'json' };
-import CrossME from '../data/Cross Main Event Civ Data.json' assert { type: 'json' };
-import CrossQME from '../data/Cross Qualifier Main Event Civ Data.json' assert { type: 'json' };
-import GoldRushQ from '../data/Gold Rush Qualifier Civ Data.json' assert { type: 'json' };
-import GoldRushME from '../data/Gold Rush Main Event Civ Data.json' assert { type: 'json' };
-import GoldRushQME from '../data/Gold Rush Qualifier Main Event Civ Data.json' assert { type: 'json' };
-import IslandsQ from '../data/Islands Qualifier Civ Data.json' assert { type: 'json' };
-import IslandsME from '../data/Islands Main Event Civ Data.json' assert { type: 'json' };
-import IslandsQME from '../data/Islands Qualifier Main Event Civ Data.json' assert { type: 'json' };
-import MudflowQ from '../data/Mudflow Qualifier Civ Data.json' assert { type: 'json' };
-import MudflowME from '../data/Mudflow Main Event Civ Data.json' assert { type: 'json' };
-import MudflowQME from '../data/Mudflow Qualifier Main Event Civ Data.json' assert { type: 'json' };
-import QuarryQ from '../data/Quarry Qualifier Civ Data.json' assert { type: 'json' };
-import QuarryME from '../data/Quarry Main Event Civ Data.json' assert { type: 'json' };
-import QuarryQME from '../data/Quarry Qualifier Main Event Civ Data.json' assert { type: 'json' };
-import SlopesQ from '../data/Slopes Qualifier Civ Data.json' assert { type: 'json' };
-import SlopesME from '../data/Slopes Main Event Civ Data.json' assert { type: 'json' };
-import SlopesQME from '../data/Slopes Qualifier Main Event Civ Data.json' assert { type: 'json' };
+import Data from '../data/Data.json' assert { type: 'json' };
 
-var dt;
+var dt = Data.filter(element => element.filter == "All11");
 
 function callback(mutationsList) {
   mutationsList.forEach((mutation) => {
@@ -38,9 +15,6 @@ var mapInput = document.getElementById('MCmap');
 mapInput.onchange = (event) => {
 
   var map = document.getElementById('MCmap').value;
-  if (map == "GoldRush") {
-    map = "Gold Rush";
-  }
   if (map == "All") {
     document.getElementById('map_image').style.display = "none";
   } else {
@@ -66,26 +40,32 @@ function stage(x) {
   
   if (y.classList.contains('active')) {
     y.children[0].style.display = "none";
+    y.setAttribute("data-active", "false");
   } else {
     y.children[0].style.display = "inline-block";
+    y.setAttribute("data-active", "true");
   }
-
 }
 
 function updateData() {
+  //console.log("updating data");
   dt.clear();
-  var file = "";
-  if (document.querySelector("#qualifier").classList.contains('active')) {
-    file += "Q";
+  var dt_new = Data; //Data.filter(element => element.Player_Civ == "Franks")
+  var map = document.getElementById('MCmap').value;
+  var filter = map;
+  if (document.querySelector("#qualifier").getAttribute("data-active") != "false") {
+    filter = filter+"1";
+  } else {
+    filter = filter+"0";
   }
-  if (document.querySelector("#mainevent").classList.contains('active')) {
-    file += "ME";
+  if (document.querySelector("#mainevent").getAttribute("data-active") != "false") {
+    filter = filter+"1";
+  } else {
+    filter = filter+"0";
   }
-  if (file != "") {
-    file = document.getElementById('MCmap').value + file;
-    //console.log(file);
-    dt.rows.add(eval(file));
-  }
+  console.log(filter);
+  dt_new = dt_new.filter(element => element.filter == filter);
+  dt.rows.add(dt_new);
   dt.draw();
 }
 
@@ -99,21 +79,21 @@ dt = $('#example').DataTable( {
     pageLength: 100,
     dom: "t",
     columns: [
-      { title: 'Civilization' },
-      { title: 'Wins' },
-      { title: 'Losses' },
-      { title: 'Win%' },
-      { title: 'First Pick' },
-      { title: 'Pick' },
-      { title: 'Ban' },
-      { title: 'Pass' },
-      { title: 'First Pick%' },
-      { title: 'Pick%' },
-      { title: 'Ban%' },
-      { title: 'Pass%' },
-      { title: 'Played%' }
+      { data: 'Civilization', title: 'Civilization' },
+      { data: 'Wins', title: 'Wins' },
+      { data: 'Losses', title: 'Losses' },
+      { data: 'Win%', title: 'Win%' },
+      { data: 'First Pick', title: 'First Pick' },
+      { data: 'Pick', title: 'Pick' },
+      { data: 'Ban', title: 'Ban' },
+      { data: 'Pass', title: 'Pass' },
+      { data: 'First Pick%', title: 'First Pick%' },
+      { data: 'Pick%', title: 'Pick%' },
+      { data: 'Ban%', title: 'Ban%' },
+      { data: 'Pass%', title: 'Pass%' },
+      { data: 'Played%', title: 'Played%' }
       ],
-      data: AllQ,
+      data: dt,
 
     autoWidth: true
 });
