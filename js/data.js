@@ -1,10 +1,17 @@
 
-import Data from '../data/Data.json' assert { type: 'json' };
-import ts from '../data/ts.json' assert { type: 'json' };
+//import Data from '../data/Data.json' assert { type: 'json' };
+//import ts from '../data/ts.json' assert { type: 'json' };
 
-document.getElementById("Mlastupdate").children[0].innerText = ts;
+var Data, dt;
+$.getJSON('./data/Data.json', function( data ) {
+  Data = data;
+  updateData();
+});
 
-var dt = Data.filter(element => element.filter == "All11");
+$.getJSON('./data/ts.json', function( data ) {
+  document.getElementById("Mlastupdate").children[0].innerText = data;
+});
+
 
 function callback(mutationsList) {
   mutationsList.forEach((mutation) => {
@@ -16,7 +23,6 @@ function callback(mutationsList) {
 
 var mapInput = document.getElementById('MCmap');
 mapInput.onchange = (event) => {
-
   var map = document.getElementById('MCmap').value;
   if (map == "All") {
     document.getElementById('map_image').style.display = "none";
@@ -66,7 +72,6 @@ function updateData() {
   } else {
     filter = filter+"0";
   }
-  console.log(filter);
   dt_new = dt_new.filter(element => element.filter == filter);
   dt.rows.add(dt_new);
   dt.draw();
@@ -75,7 +80,6 @@ function updateData() {
 document.querySelector("#mainevent").addEventListener("click", stage);
 document.querySelector("#qualifier").addEventListener("click", stage);
 
-//new DataTable('#example', {
 
 dt = $('#example').DataTable( {
       order: [[1, 'desc']],
@@ -96,7 +100,7 @@ dt = $('#example').DataTable( {
       { data: 'Pass%', title: 'Pass%' },
       { data: 'Played%', title: 'Played%' }
       ],
-      data: dt,
+      data: null, //dt,
 
     autoWidth: true
 });
